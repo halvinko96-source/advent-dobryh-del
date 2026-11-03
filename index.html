@@ -41,7 +41,7 @@ const tasks=[
 const key='pgatkk-advent-v1', get=id=>document.getElementById(id);
 let done=new Set(), selected=0;
 try{const saved=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(saved))done=new Set(saved.filter(i=>Number.isInteger(i)&&i>=0&&i<tasks.length));}catch{get('storage').textContent='В этом браузере отметки сохраняются только до закрытия страницы.';}
-const rows=[[260],[242,278],[224,260,296],[206,242,278,314],[189,224,260,296,331],[170,206,242,278,314,350],[242,278]];
+const rows=[[260],[242,278],[224,260,296],[206,242,278,314],[189,224,260,296,331],[170,206,242,278,314,350],[224,260,296]];
 const points=rows.flatMap((row,y)=>row.map(x=>[x,88+y*27]));
 const colors=['#ffd489','#ff9896','#b5e2bc','#e9b6ea'];
 const buttons=[], bulbs=[];
