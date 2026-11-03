@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная новогодняя ёлка с поздравлениями и шуточными заданиями от ПГАТККЛЕЩЕВА">
+<title>Ёлка оживших поздравлений</title>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#fff7e4;background:radial-gradient(ellipse at 50% 42%,#174f48,#072725 64%,#041a1b);font:16px system-ui,sans-serif;text-align:center;min-height:100vh}main{max-width:850px;margin:auto;padding:34px 15px 16px}header small{color:#ffd89c;letter-spacing:.16em;text-transform:uppercase;font-size:.72rem}h1{font:700 clamp(2rem,7vw,4.4rem)/1 Georgia,serif;color:#ffdd9a;margin:.3em 0}p{line-height:1.55}header p{max-width:35rem;margin:0 auto;color:#f4e7ca}.scene{width:min(100%,480px);aspect-ratio:1/1.04;position:relative;margin:12px auto 0}.tree{width:100%;height:100%;position:absolute;inset:0;filter:drop-shadow(0 10px 18px #001d19)}.toy{position:absolute;transform:translate(-50%,-50%);width:clamp(43px,11vw,57px);aspect-ratio:1;border-radius:50%;border:2px solid #ffdf9b;background:radial-gradient(circle at 32% 25%,var(--shine),var(--deep) 66%);box-shadow:0 4px 12px #001c17,0 0 14px #ffc46c45;color:#fff;font-size:23px;cursor:pointer}.toy::before{content:'';position:absolute;width:12px;height:7px;background:#e9bf74;border-radius:3px;top:-6px;left:calc(50% - 6px)}.toy:hover,.toy:focus-visible{filter:brightness(1.25);scale:1.1}.toy[data-opened=true]{box-shadow:0 0 16px #ffe3a2}.gifts{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.gift,#close{font:inherit;font-weight:700;border:1px solid #d9b376;border-radius:12px;padding:10px 14px;background:#7f2438;color:#fff6df;cursor:pointer}#close{background:#f8d391;color:#262019}button:focus-visible{outline:3px solid white;outline-offset:3px}.hint,footer{color:#d8c9a7;font-size:.85rem}footer{margin:30px auto 5px}dialog{border:1px solid #c79c57;border-radius:22px;background:#103733;color:#fff7e4;width:min(92%,470px);padding:24px;box-shadow:0 15px 80px #0009}dialog::backdrop{background:#001613cc}dialog h2{font:700 1.9rem Georgia,serif;color:#ffdd9a;margin:.45em 0}#symbol{display:block;font-size:3rem;animation:appear .55s ease-out}#body{animation:appear .55s ease-out}video{max-width:100%;max-height:55vh;border-radius:10px}.snow{position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(circle,#fff8 1px,transparent 2px),radial-gradient(circle,#fff5 1px,transparent 2px);background-size:91px 103px,137px 151px;background-position:0 0,24px 40px;animation:snow 15s linear infinite}@keyframes snow{to{background-position:91px 103px,161px 191px}}@keyframes appear{from{opacity:.15;translate:0 12px}to{opacity:1;translate:0 0}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<div class="snow" aria-hidden="true"></div>
+<main>
+<header><small>Новогодний проект колледжа</small><h1>Ёлка оживших<br>поздравлений</h1><p>Нажмите на игрушку, чтобы открыть поздравление. Под ёлкой спрятаны задания для всей компании!</p></header>
+<div class="scene" id="scene">
+<svg class="tree" viewBox="0 0 480 500" aria-hidden="true">
+<defs><linearGradient id="fir" x2="1" y2="1"><stop stop-color="#28765c"/><stop offset="1" stop-color="#0a352e"/></linearGradient><radialGradient id="halo"><stop stop-color="#ffd988" stop-opacity=".56"/><stop offset="1" stop-color="#ffd988" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="240" cy="470" rx="208" ry="18" fill="#bce1d3" opacity=".27"/>
+<rect x="222" y="390" width="36" height="74" rx="9" fill="#865141"/>
+<path d="M240 75Q201 161 154 198L183 195Q146 258 97 291L140 287Q94 362 44 400Q85 415 129 399Q110 425 87 435Q173 460 240 431Q311 459 393 435Q365 418 351 399Q404 416 436 400Q377 348 340 287L383 291Q326 250 297 195L326 198Q275 152 240 75Z" fill="url(#fir)" stroke="#5e9c7c" stroke-width="2"/>
+<path d="M161 205Q260 228 304 192M112 300Q249 339 363 284M73 392Q239 444 406 382" fill="none" stroke="#e6ad63" stroke-width="3" stroke-dasharray="1 9" stroke-linecap="round"/>
+<circle cx="240" cy="73" r="68" fill="url(#halo)"/><path d="m240 39 9 22 24 2-19 16 6 24-20-13-20 13 6-24-19-16 24-2Z" fill="#ffda86" stroke="#fff3c9" stroke-width="2"/>
+</svg>
+</div>
+<p class="hint" id="progress" aria-live="polite"></p>
+<h2>Подарки под ёлкой</h2>
+<div class="gifts" id="gifts"></div>
+<footer><strong>Разработано #ПГАТККЛЕЩЕВА</strong><br>Пинский государственный аграрно-технический колледж имени А. Е. Клещева</footer>
+</main>
+<dialog id="card" aria-labelledby="title">
+<span id="symbol" aria-hidden="true"></span><p id="sender" class="hint"></p><h2 id="title"></h2><p id="body"></p><div id="media"></div>
+<form method="dialog"><button id="close" autofocus>К ёлке</button></form>
+</dialog>
+<script>
+'use strict';
+// Добавьте video: './media/111b.mp4' или audio: './media/muzzart.mp3'
+// в соответствующую карточку после загрузки файла в репозиторий.
+const toys = [
+ {sender:'Группа 111Б',icon:'❄️',title:'Снежный привет',body:'Пусть в новом году найдётся время для друзей, смелых идей и маленьких побед. С праздником!',x:50,y:30},
+ {sender:'Группа 241Б',icon:'⭐',title:'Звёздный старт',body:'Пусть всё, что вы давно хотели попробовать, начнётся с одного смелого шага. Удачи в новом году!',x:38,y:48},
+ {sender:'MuzzArt',icon:'🎵',title:'Музыкальная открытка',body:'Пусть у каждого дня будет своя любимая мелодия. Включите праздничные колокольчики!',melody:true,x:62,y:47},
+ {sender:'Струны души',icon:'🎸',title:'Зимний аккорд',body:'Желаем, чтобы рядом были люди, с которыми хочется петь даже по дороге домой.',x:27,y:66},
+ {sender:'Импровизация',icon:'🎭',title:'Праздничная премьера',body:'Пусть в новом году будут яркие роли, добрые сюрпризы и повод от души посмеяться!',x:50,y:66},
+ {sender:'Доброе Сердце',icon:'💛',title:'Тепло рядом',body:'Пусть в новом году у вас будет много поводов сказать «спасибо» и ещё больше поводов услышать его в ответ.',x:73,y:68}
+];
+const gifts = [
+ {icon:'🎁',title:'Морозный репортаж',body:'За 15 секунд расскажите о первом снеге голосом спортивного комментатора.'},
+ {icon:'🎁',title:'Угадай игрушку',body:'Изобразите ёлочную игрушку без слов. Пусть компания угадает, что это.'},
+ {icon:'🎁',title:'Тост на букву «С»',body:'Придумайте три коротких пожелания на букву «С». Например, «смелых решений!»'}
+];
+const get = id => document.getElementById(id);
+const dialog = get('card');
+const seen = new Set();
+let sound;
+function progress(){get('progress').textContent = 'Открыто игрушек: '+seen.size+' из '+toys.length+(seen.size===toys.length?' · Все поздравления собраны!':'');}
+function play(){
+ const Audio = window.AudioContext || window.webkitAudioContext;
+ if(!Audio)return;
+ if(sound) sound.close();
+ sound=new Audio();
+ sound.resume().catch(()=>{});
+ const now=sound.currentTime;
+ [659,659,659,659,659,659,659,784,523,587,659].forEach((hz,i)=>{
+   const oscillator=sound.createOscillator(), gain=sound.createGain(), start=now+i*.28+Math.floor(i/3)*.12;
+   oscillator.frequency.value=hz; gain.gain.setValueAtTime(.001,start);
+   gain.gain.exponentialRampToValueAtTime(.15,start+.015);
+   gain.gain.exponentialRampToValueAtTime(.001,start+.36);
+   oscillator.connect(gain).connect(sound.destination);oscillator.start(start);oscillator.stop(start+.37);
+ });
+}
+function open(item){
+ get('symbol').textContent=item.icon;get('sender').textContent=item.sender?'Демонстрационная открытка · '+item.sender:'Новогоднее задание';
+ get('title').textContent=item.title;get('body').textContent=item.body;
+ const media=get('media');media.replaceChildren();
+ if(item.video || item.audio){
+   get('sender').textContent=item.sender;
+   const player=document.createElement(item.video?'video':'audio');
+   player.controls=true;player.preload='metadata';player.src=item.video||item.audio;
+   if(item.video)player.playsInline=true;
+   player.addEventListener('error',()=>{media.textContent='Медиафайл не удалось загрузить.';});
+   media.append(player);
+ }else if(item.melody){
+   const button=document.createElement('button');button.className='gift';button.textContent='♪ Включить мелодию';button.onclick=play;media.append(button);
+ }
+ dialog.showModal();
+}
+dialog.addEventListener('close',()=>{get('media').replaceChildren();if(sound){sound.close();sound=null;}});
+toys.forEach((item,i)=>{
+ const button=document.createElement('button');
+ button.className='toy';button.textContent=item.icon;button.setAttribute('aria-label','Открыть поздравление: '+item.sender);
+ button.style.left=item.x+'%';button.style.top=item.y+'%';
+ button.style.setProperty('--shine',['#f08580','#ffcc76','#77bdae'][i%3]);
+ button.style.setProperty('--deep',['#8d1537','#80501e','#19685e'][i%3]);
+ button.onclick=()=>{seen.add(i);button.dataset.opened='true';progress();open(item);};
+ get('scene').append(button);
+});
+gifts.forEach((item,i)=>{
+ const button=document.createElement('button');button.className='gift';button.textContent='🎁 Подарок '+(i+1);button.onclick=()=>open(item);get('gifts').append(button);
+});
+progress();
+</script>
+</html>
