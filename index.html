@@ -1,0 +1,69 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Адвент добрых дел · #ПГАТККЛЕЩЕВА</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fff7e8;color:#293c31;font:16px/1.5 system-ui}main,header,footer{max-width:1200px;margin:auto;padding:20px clamp(16px,5vw,60px)}header,footer{font-size:13px;font-weight:700;letter-spacing:1px}header{border-bottom:1px solid #dfd1ba}h1{font:clamp(42px,7vw,86px)/1 Georgia;margin:16px 0;color:#983b41}h2{font:30px Georgia}.eyebrow{font-size:12px;letter-spacing:2px;font-weight:700;color:#863136}.hero{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:28px;margin:16px 0 26px}.scene{background:#102e32;border-radius:20px;overflow:hidden;box-shadow:0 15px 35px #25392225}.scene svg{width:100%;display:block}.bulb{fill:#52756a;transition:fill .4s}.bulb.lit{fill:var(--light);filter:drop-shadow(0 0 6px var(--light))}button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #166e71;outline-offset:3px}.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.door{border:1px solid #daccb6;background:#fffdf5;color:#293c31;border-radius:12px;padding:12px;text-align:left;min-height:92px}.door:hover{border-color:#983b41}.door b{display:block;color:#983b41;font:30px Georgia}.door span{font-size:12px}.door.done{background:#dcebd9;border-color:#91ac88}.door.done b{color:#386345}progress{width:100%;accent-color:#497752}.primary,.secondary{border:0;border-radius:8px;padding:10px 15px;font-weight:700}.primary{background:#983b41;color:white}.secondary{background:#eee3cc;color:#293c31}dialog{border:1px solid #daccb6;border-radius:18px;background:#fffaf0;color:#293c31;width:min(460px,calc(100% - 30px));padding:24px}dialog::backdrop{background:#102e32bb}.close{float:right;border:0;background:transparent;font-size:24px}.note{font-size:13px;color:#535d4e}footer{border-top:1px solid #dfd1ba;margin-top:28px}.actions{display:flex;gap:8px;flex-wrap:wrap}.finish{padding:16px;background:#e6efd9;border-radius:12px;margin-top:20px}@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:330px){.grid{grid-template-columns:repeat(2,1fr)}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<header>✦ ДЕКАБРЬ В #ПГАТККЛЕЩЕВА</header><main>
+<section class="hero"><div><div class="eyebrow">24 ДНЯ · 24 ДОБРЫХ ДЕЛА</div><h1>Адвент<br>добрых дел</h1><p>Открой окошко, выполни задание и зажги огонёк на ёлке. Можно начать с любого дня.</p><p id="count" role="status"></p><progress id="bar" value="0" max="24" aria-label="Выполненные дела"></progress></div>
+<div class="scene"><svg viewBox="0 0 520 320" role="img" aria-label="Новогодняя ёлка с огоньками"><rect width="520" height="320" fill="#102e32"/><circle cx="405" cy="62" r="29" fill="#f2d69c"/><path d="M0 253Q111 218 235 264T520 247V320H0Z" fill="#d9e4d8"/><path d="M250 244h20v43h-20" fill="#a67553"/><path d="M260 54 186 155h30l-62 65h41l-64 54h258l-64-54h41l-62-65h30z" fill="#36735b"/><path d="m260 29 6 13 15 2-11 10 3 15-13-7-13 7 3-15-11-10 15-2z" fill="#f5cf83"/><g id="bulbs"></g><g fill="#e9f4e7" opacity=".6"><circle cx="76" cy="62" r="3"/><circle cx="97" cy="136" r="2"/><circle cx="140" cy="37" r="2"/><circle cx="440" cy="144" r="3"/><circle cx="476" cy="94" r="2"/><circle cx="40" cy="190" r="2"/><circle cx="380" cy="182" r="2"/><circle cx="320" cy="35" r="2"/></g></svg></div></section>
+<h2>Окошки декабря</h2><div id="grid" class="grid"></div>
+<section id="finish" class="finish" hidden><strong>Все 24 огонька зажжены!</strong><p>Спасибо за внимание и заботу, которыми ты поделился в этом декабре. С наступающим Новым годом!</p></section>
+<p class="note" id="storage">Отметки сохраняются в этом браузере.</p><button class="secondary" id="reset">Сбросить отметки</button></main>
+<footer>Разработано #ПГАТККЛЕЩЕВА</footer>
+<dialog id="task" aria-labelledby="taskTitle"><button class="close" id="close" aria-label="Закрыть">×</button><p class="eyebrow" id="day"></p><h2 id="taskTitle"></h2><p id="description"></p><div class="actions"><button class="primary" id="toggle"></button></div></dialog>
+<dialog id="confirm" aria-labelledby="resetTitle"><h2 id="resetTitle">Сбросить отметки?</h2><p>Все огоньки на ёлке погаснут.</p><div class="actions"><button class="secondary" id="cancel">Отмена</button><button class="primary" id="clear">Сбросить</button></div></dialog>
+<script>
+const tasks=[
+['Тёплое спасибо','Поблагодари человека, который недавно тебе помог. Скажи, за какой конкретный поступок.'],
+['Рядом','Напиши другу, с которым давно не общался. Спроси, как у него дела.'],
+['Забота о доме','Возьми на себя одно небольшое домашнее дело и доведи его до конца.'],
+['Поддержка в группе','Предложи одногруппнику помощь с темой, которую хорошо понял.'],
+['Чистое место','Приведи в порядок своё рабочее место, парту или полку в общежитии.'],
+['Комплимент по делу','Заметь чьё-то усилие и скажи, что именно у человека хорошо получилось.'],
+['День без спешки','Выслушай собеседника до конца и задай один вопрос о том, что для него важно.'],
+['Слово педагогу','Скажи преподавателю, какое объяснение или совет пригодились тебе на практике.'],
+['Доброе сообщение','Пошли близкому человеку короткое пожелание, написанное специально для него.'],
+['Поделись знанием','Расскажи одногруппникам об одном полезном приёме для учёбы или практики.'],
+['Подарок своими руками','Сделай небольшую открытку для человека, которого хочется порадовать.'],
+['Помоги освоиться','Если кто-то в группе чувствует себя одиноко, пригласи его присоединиться к общему делу.'],
+['Береги ресурсы','Выключи ненужный свет и проверь, не оставил ли воду открытой.'],
+['Хорошая привычка','Уступи место или придержи дверь тому, кому сейчас это пригодится.'],
+['Добро в общежитии','Предложи соседям вместе привести в порядок общее пространство.'],
+['Доброе сердце','Спроси у волонтёрского отряда «Доброе Сердце», какая небольшая помощь сейчас нужна.'],
+['Милосердие','Узнай, к какой инициативе отряда «Милосердие» можно присоединиться, и выбери посильное дело.'],
+['Безопасная переписка','Поделись с близким одним способом проверить подозрительное сообщение.'],
+['Семейная история','Попроси старшего родственника рассказать о любимой новогодней традиции.'],
+['Второй шанс вещам','Найди вещь в хорошем состоянии, которую готов передать тому, кому она нужна. Сначала уточни, нужна ли она.'],
+['Мирный разговор','Если осталось недопонимание, предложи спокойно обсудить его и выслушай другую сторону.'],
+['Заметь незаметное','Поблагодари сотрудника колледжа, чей ежедневный труд делает учёбу удобнее.'],
+['Добро для себя','Выдели время на отдых или прогулку и запиши, за что ценишь себя в этом году.'],
+['Передай дальше','Вспомни одно дело из календаря, которое хочется повторить, и выбери день для него в январе.']
+];
+const key='pgatkk-advent-v1', get=id=>document.getElementById(id);
+let done=new Set(), selected=0;
+try{const saved=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(saved))done=new Set(saved.filter(i=>Number.isInteger(i)&&i>=0&&i<tasks.length));}catch{get('storage').textContent='В этом браузере отметки сохраняются только до закрытия страницы.';}
+const rows=[[260],[242,278],[224,260,296],[206,242,278,314],[189,224,260,296,331],[170,206,242,278,314,350],[242,278]];
+const points=rows.flatMap((row,y)=>row.map(x=>[x,88+y*27]));
+const colors=['#ffd489','#ff9896','#b5e2bc','#e9b6ea'];
+const buttons=[], bulbs=[];
+tasks.forEach(([title],i)=>{
+ const b=document.createElement('button');b.className='door';
+ const n=document.createElement('b');n.textContent=String(i+1).padStart(2,'0');
+ const label=document.createElement('span');label.textContent=title;b.append(n,label);
+ b.onclick=()=>{selected=i;get('day').textContent=(i+1)+' декабря';get('taskTitle').textContent=title;get('description').textContent=tasks[i][1];get('toggle').textContent=done.has(i)?'Снять отметку':'Дело выполнено ✓';get('task').showModal();};
+ get('grid').append(b);buttons.push(b);
+ const bulb=document.createElementNS('http://www.w3.org/2000/svg','circle');
+ bulb.setAttribute('cx',points[i][0]);bulb.setAttribute('cy',points[i][1]);bulb.setAttribute('r','6');
+ bulb.classList.add('bulb');bulb.style.setProperty('--light',colors[i%colors.length]);get('bulbs').append(bulb);bulbs.push(bulb);
+});
+function render(){
+ get('count').textContent='Зажжено '+done.size+' из 24 огоньков';get('bar').value=done.size;get('finish').hidden=done.size!==24;get('reset').disabled=!done.size;
+ buttons.forEach((b,i)=>{b.classList.toggle('done',done.has(i));b.setAttribute('aria-label',(i+1)+' декабря. '+tasks[i][0]+(done.has(i)?'. Выполнено':''));b.firstChild.textContent=String(i+1).padStart(2,'0')+(done.has(i)?' ✓':'');bulbs[i].classList.toggle('lit',done.has(i));});
+}
+function save(){try{localStorage.setItem(key,JSON.stringify([...done]));}catch{get('storage').textContent='В этом браузере отметки сохраняются только до закрытия страницы.';}render();}
+get('toggle').onclick=()=>{if(done.has(selected))done.delete(selected);else done.add(selected);save();get('task').close();};
+get('close').onclick=()=>get('task').close();
+get('reset').onclick=()=>get('confirm').showModal();
+get('cancel').onclick=()=>get('confirm').close();
+get('clear').onclick=()=>{done.clear();save();get('confirm').close();buttons[0].focus();};
+render();
+</script></html>
