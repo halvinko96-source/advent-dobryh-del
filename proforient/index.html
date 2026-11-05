@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Курс на будущее — игры #ПГАТККЛЕЩЕВА</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#163b38;background:#f2f8f4;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0}button,a{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #e29245;outline-offset:3px}
+.wrap{max-width:780px;padding:24px 18px 36px;margin:auto}.top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:30px}.brand{font-size:.8rem;font-weight:800;letter-spacing:.05em;color:#1b6558}.home{background:transparent;border:0;color:#176d5e;font-weight:700;padding:8px}.tag{display:inline-block;padding:8px 12px;background:#dcefe5;border-radius:99px;font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#276653}
+h1{font-size:clamp(2.35rem,9vw,4.7rem);line-height:.99;letter-spacing:-.05em;margin:18px 0}h1 em{color:#248675;font-style:normal}h2{font-size:clamp(1.5rem,6vw,2.3rem);line-height:1.12;letter-spacing:-.035em;margin:14px 0}h3{margin:0 0 7px;font-size:1.2rem}p{line-height:1.55}.lead{font-size:1.12rem;color:#496864;max-width:600px}.cards{display:grid;gap:12px;margin:25px 0}.card,.panel{background:#fff;border:1px solid #dcebe1;border-radius:22px;padding:20px;box-shadow:0 5px 22px #1c62440b}.card{display:grid;grid-template-columns:50px 1fr auto;align-items:center;text-align:left;gap:14px;width:100%;color:inherit}.card:hover,.option:hover{border-color:#50a892;background:#f6fffa}.emoji{font-size:1.7rem;background:#e8f4eb;width:50px;height:50px;display:grid;place-items:center;border-radius:15px}.small{font-size:.88rem;color:#56746e;line-height:1.45}.arrow{font-size:1.3rem;color:#348a78}.panel{padding:clamp(20px,5vw,32px)}.eyebrow{font-size:.78rem;font-weight:800;color:#348a78;text-transform:uppercase;letter-spacing:.08em}.progress{height:8px;border-radius:9px;background:#e4f1e8;overflow:hidden;margin:14px 0 25px}.bar{height:100%;background:#55a98d;border-radius:9px}.options{display:grid;gap:10px;margin-top:22px}.option{padding:15px 16px;text-align:left;background:#fbfdfb;border:1px solid #dbe9df;border-radius:14px;color:#1b413b;line-height:1.35;min-height:54px}.option strong{color:#2a9079;margin-right:8px}.btn{border:0;background:#1c806a;color:white;border-radius:13px;padding:14px 19px;font-weight:750;min-height:50px}.btn:hover{background:#126954}.secondary{background:#e8f3eb;color:#246955}.hint{background:#eaf5ef;border-left:4px solid #5aab8f;padding:13px 15px;border-radius:0 12px 12px 0;margin:11px 0;line-height:1.4}.feedback{background:#e8f6ed;border-radius:16px;padding:17px;margin:20px 0}.feedback.wrong{background:#fff3e9}.feedback p{margin:6px 0}.result{background:#edf8f0;border-radius:16px;padding:17px;margin:12px 0}.result h3{color:#1a765f}.action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.footer{font-size:.82rem;color:#64817a;margin-top:27px;line-height:1.5}.footer a{color:#176d5e}.subtle{font-size:.9rem;color:#638079}.count{display:flex;justify-content:space-between;gap:12px;color:#56746e;font-size:.84rem}
+@media(max-width:450px){.wrap{padding:18px 14px 28px}.top{margin-bottom:22px}.card{grid-template-columns:44px 1fr auto;padding:15px 12px}.emoji{width:44px;height:44px;font-size:1.45rem}.card h3{font-size:1.05rem}}
+</style>
+</head>
+<body>
+<main class="wrap" id="app" aria-live="polite"></main>
+<script>
+(function(){
+'use strict';
+var fields=[
+ {id:'water',short:'Мелиорация земель',full:'Мелиорация земель',emoji:'💧',desc:'Работа с водным режимом земель, мелиоративными системами и наблюдениями на местности.'},
+ {id:'farm',short:'Сельскохозяйственная техника',full:'Техническое обслуживание и ремонт сельскохозяйственной техники',emoji:'🚜',desc:'Обслуживание и ремонт техники, которая помогает выращивать и собирать урожай.'},
+ {id:'build',short:'Строительство зданий',full:'Строительство зданий и сооружений',emoji:'🏗️',desc:'Строительные материалы, чертежи, организация и контроль работ на объектах.'},
+ {id:'road',short:'Автомобильные дороги',full:'Строительство и эксплуатация автомобильных дорог',emoji:'🛣️',desc:'Строительство, обследование и содержание автомобильных дорог.'},
+ {id:'machines',short:'Дорожные и подъёмные машины',full:'Техническая эксплуатация подъёмно-транспортных, дорожностроительных машин и оборудования',emoji:'⚙️',desc:'Техническая эксплуатация и обслуживание машин, применяемых в строительстве и погрузочных работах.'}
+];
+var profile=[
+ {q:'Какой объект тебе интереснее изучать?',a:[['Комбайн или трактор','farm'],['Канал и водный режим поля','water'],['Будущее здание','build'],['Автомобильную дорогу','road'],['Экскаватор или подъёмный кран','machines']]},
+ {q:'Какую задачу ты бы выбрал для практики?',a:[['Изучить чертёж здания','build'],['Разобраться в устройстве комбайна','farm'],['Понаблюдать за состоянием покрытия дороги','road'],['Посмотреть, как работает мелиоративная система','water'],['Изучить устройство строительной машины','machines']]},
+ {q:'Какой результат работы тебя больше вдохновляет?',a:[['Земля с подходящим водным режимом','water'],['Исправная машина на строительной площадке','machines'],['Надёжное здание','build'],['Техника, готовая к полевым работам','farm'],['Удобная и ухоженная дорога','road']]},
+ {q:'На экскурсии где тебе захотелось бы задержаться?',a:[['У дорожного катка и экскаватора','machines'],['На участке строительства здания','build'],['В мастерской сельхозтехники','farm'],['У мелиоративного канала','water'],['На дорожном объекте','road']]},
+ {q:'Что тебе ближе?',a:[['Следить за состоянием дорог','road'],['Изучать строительные конструкции','build'],['Разбираться в сельскохозяйственных машинах','farm'],['Изучать воду и её движение','water'],['Поддерживать в исправности специальные машины','machines']]}
+];
+var missions=[
+ {title:'Урожай под угрозой',q:'Перед уборкой урожая комбайну требуется проверка. Какой специалист поможет организовать его техническое обслуживание?',a:['Специалист по сельскохозяйственной технике','Специалист по строительству зданий','Специалист по водному режиму земель'],correct:0,why:'Сельскохозяйственную технику обслуживают и ремонтируют специалисты соответствующего направления.'},
+ {title:'Вода на поле',q:'На участке долго стоит вода. С чего стоит начать изучение ситуации?',a:['Изучить состояние участка и водного режима','Покрасить здание рядом с полем','Менять детали в комбайне'],correct:0,why:'Для работы с водным режимом сначала собирают сведения об участке и состоянии мелиоративной системы.'},
+ {title:'Новый корпус',q:'Команда готовится строить учебный корпус. Что поможет проверить соответствие будущего здания замыслу?',a:['План движения транспорта на дороге','Чертежи и проектная документация здания','Таблица уборки урожая'],correct:1,why:'Строители зданий используют проектную документацию и контролируют выполнение работ.'},
+ {title:'Дорога в ремонте',q:'На дороге заметили повреждения покрытия. Какой первый шаг поможет подготовить ремонт?',a:['Обследовать покрытие и зафиксировать повреждения','Составить план полива растений','Проверить схему комнат в здании'],correct:0,why:'Обследование помогает определить состояние дороги и запланировать дальнейшие работы.'},
+ {title:'Большая машина',q:'На строительной площадке экскаватору требуется техническое обслуживание. Какое направление связано с этой задачей?',a:['Мелиорация земель','Эксплуатация дорожных и подъёмных машин','Строительство зданий и сооружений'],correct:1,why:'Эксплуатация и обслуживание дорожно-строительных машин — отдельное техническое направление.'}
+];
+var detective=[
+ {id:'farm',h:['Без меня во время полевых работ техника может остановиться.','Я разбираюсь в машинах, которые помогают получать урожай.','Тракторы и комбайны — мои знакомые.']},
+ {id:'water',h:['В своей работе я обращаю внимание на состояние земель.','Мне важно, сколько воды на участке и как она движется.','Мелиоративные каналы и водный режим — моя тема.']},
+ {id:'build',h:['Результат моей работы можно увидеть в городе и деревне.','Я работаю с проектами, материалами и строительными конструкциями.','Я связан со строительством зданий и сооружений.']},
+ {id:'road',h:['Моя работа помогает людям и грузам добираться до места.','Я изучаю состояние покрытия и вопросы его ремонта.','Моя специальность связана с автомобильными дорогами.']},
+ {id:'machines',h:['Мои помощники часто работают на больших объектах.','Я изучаю техническое состояние строительных и подъёмных машин.','Экскаватор и подъёмный кран — техника моего направления.']}
+];
+var root=document.getElementById('app'), state={mode:'home'};
+function field(id){return fields.filter(function(f){return f.id===id})[0]}
+function header(){return '<div class="top"><span class="brand">#ПГАТККЛЕЩЕВА</span>'+(state.mode==='home'?'':'<button class="home" data-act="home">← Все игры</button>')+'</div>'}
+function footer(){return '<div class="footer">Разработано #ПГАТККЛЕЩЕВА · <a href="https://pgatkk.by/" target="_blank" rel="noopener noreferrer">Сайт колледжа ↗</a><br>Сведения о поступлении уточняй в приёмной комиссии.</div>'}
+function layout(content){root.innerHTML=header()+content+footer()}
+function button(label,act,value,klass){return '<button class="'+(klass||'option')+'" data-act="'+act+'"'+(value===undefined?'':' data-value="'+value+'"')+'>'+label+'</button>'}
+function bar(index,total){return '<div class="count"><span>Задание '+(index+1)+' из '+total+'</span><span>'+Math.round(index/total*100)+'%</span></div><div class="progress" role="progressbar" aria-label="Прогресс игры" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(index/total*100)+'"><div class="bar" style="width:'+Math.round(index/total*100)+'%"></div></div>'}
+function home(){
+ layout('<span class="tag">Твоя профессия начинается здесь</span><h1>Курс на <em>будущее</em></h1><p class="lead">Выбирай игру, пробуй себя в разных задачах и открывай специальности колледжа.</p><div class="cards">'+
+ '<button class="card" data-act="start" data-value="profile"><span class="emoji">🧭</span><span><h3>Мой профессиональный маршрут</h3><span class="small">Выбери то, что интересно, и узнай, какие направления стоит изучить.</span></span><span class="arrow">→</span></button>'+
+ '<button class="card" data-act="start" data-value="missions"><span class="emoji">🚀</span><span><h3>Пять миссий будущего</h3><span class="small">Реши пять ситуаций и познакомься с работой специалистов.</span></span><span class="arrow">→</span></button>'+
+ '<button class="card" data-act="start" data-value="detective"><span class="emoji">🔎</span><span><h3>Профдетектив</h3><span class="small">Угадывай направление по подсказкам. Чем раньше ответ, тем больше баллов!</span></span><span class="arrow">→</span></button></div><p class="subtle">Играй без регистрации. Ответы остаются на твоём устройстве.</p>');
+}
+function renderProfile(){
+ if(state.done){
+  var counts={};fields.forEach(function(f){counts[f.id]=0});state.answers.forEach(function(id){counts[id]++});var max=Math.max.apply(null,fields.map(function(f){return counts[f.id]}));var winners=fields.filter(function(f){return counts[f.id]===max});
+  layout('<div class="panel"><span class="eyebrow">Твой результат</span><h2>Тебе может быть интересно</h2><p>По твоим ответам выделились следующие направления:</p>'+winners.map(function(f){return '<div class="result"><h3>'+f.emoji+' '+f.full+'</h3><span class="small">'+f.desc+'</span></div>'}).join('')+'<p class="small">Это игровой ориентир по твоим ответам, а не психологическая диагностика. Изучи и другие специальности — интересы могут сочетаться.</p><div class="action-row">'+button('Пройти ещё раз','start','profile','btn')+button('Все игры','home',undefined,'btn secondary')+'</div></div>');return;
+ }
+ var p=profile[state.index];
+ layout('<div class="panel"><span class="eyebrow">🧭 Мой профессиональный маршрут</span><h2>'+p.q+'</h2>'+bar(state.index,profile.length)+'<p class="small">Выбери один вариант, который тебе ближе. Неправильных ответов нет.</p><div class="options">'+p.a.map(function(a,i){return button(a[0],'pick',i)}).join('')+'</div></div>');
+}
+function renderMissions(){
+ if(state.done){layout('<div class="panel"><span class="eyebrow">🚀 Миссия завершена</span><h2>Твой результат: '+state.score+' из '+missions.length+'</h2><p>Ты познакомился с задачами специалистов колледжа. Каждая профессия помогает создавать полезные и важные вещи!</p><div class="action-row">'+button('Сыграть ещё раз','start','missions','btn')+button('Все игры','home',undefined,'btn secondary')+'</div></div>');return}
+ var m=missions[state.index], content='<div class="panel"><span class="eyebrow">🚀 '+m.title+'</span><h2>'+m.q+'</h2>'+bar(state.index,missions.length);
+ if(state.feedback){content+='<div class="feedback '+(state.correct?'':'wrong')+'"><strong>'+(state.correct?'Верно!':'Почти!')+'</strong><p>'+m.why+'</p>'+(state.correct?'':'<p>Подходящий ответ: '+m.a[m.correct]+'.</p>')+'</div>'+button(state.index===missions.length-1?'Посмотреть результат':'Следующая миссия','next',undefined,'btn')}
+ else{content+='<div class="options">'+m.a.map(function(a,i){return button(a,'pick',i)}).join('')+'</div>'}
+ layout(content+'</div>');
+}
+function renderDetective(){
+ if(state.done){layout('<div class="panel"><span class="eyebrow">🔎 Дело раскрыто</span><h2>Твой результат: '+state.score+' из 15</h2><p>Теперь ты лучше знаешь, чем отличаются направления колледжа.</p><div class="action-row">'+button('Играть ещё раз','start','detective','btn')+button('Все игры','home',undefined,'btn secondary')+'</div></div>');return}
+ var d=detective[state.index], content='<div class="panel"><span class="eyebrow">🔎 Профдетектив</span><h2>Какое это направление?</h2>'+bar(state.index,detective.length)+'<p class="small">Подсказка '+state.hints+' из 3 · за правильный ответ сейчас: '+(4-state.hints)+' балл(а)</p>'+d.h.slice(0,state.hints).map(function(h,i){return '<div class="hint"><strong>'+(i+1)+'.</strong> '+h+'</div>'}).join('');
+ if(state.feedback){content+='<div class="feedback '+(state.correct?'':'wrong')+'"><strong>'+(state.correct?'Ты угадал!':'В этот раз не угадал.')+'</strong><p>'+field(d.id).emoji+' '+field(d.id).full+'</p><p>'+field(d.id).desc+'</p></div>'+button(state.index===detective.length-1?'Посмотреть результат':'Следующая загадка','next',undefined,'btn')}
+ else {if(state.hints<3)content+='<div class="action-row">'+button('Показать ещё подсказку','hint',undefined,'btn secondary')+'</div>';content+='<div class="options">'+fields.map(function(f,i){return button(f.emoji+' '+f.short,'pick',i)}).join('')+'</div>'}
+ layout(content+'</div>');
+}
+function render(){if(state.mode==='home')home();else if(state.mode==='profile')renderProfile();else if(state.mode==='missions')renderMissions();else renderDetective()}
+root.addEventListener('click',function(e){
+ var b=e.target.closest('button[data-act]');if(!b)return;var act=b.dataset.act,v=b.dataset.value;
+ if(act==='home'){state={mode:'home'}}
+ else if(act==='start'){state={mode:v,index:0,score:0,answers:[],hints:1,done:false,feedback:false}}
+ else if(act==='hint'&&state.mode==='detective'&&!state.feedback){state.hints=Math.min(3,state.hints+1)}
+ else if(act==='pick'&&!state.feedback){
+  var n=Number(v);
+  if(state.mode==='profile'){state.answers.push(profile[state.index].a[n][1]);state.index++;if(state.index===profile.length)state.done=true}
+  else if(state.mode==='missions'){state.correct=n===missions[state.index].correct;if(state.correct)state.score++;state.feedback=true}
+  else if(state.mode==='detective'){state.correct=fields[n].id===detective[state.index].id;if(state.correct)state.score+=4-state.hints;state.feedback=true}
+ }
+ else if(act==='next'&&state.feedback){state.index++;state.feedback=false;state.hints=1;if(state.index===(state.mode==='missions'?missions.length:detective.length))state.done=true}
+ render();
+});
+var directMode = window.location.hash.slice(1);
+if (['profile','missions','detective'].indexOf(directMode) !== -1) {
+  state = {mode: directMode, index: 0, score: 0, answers: [], hints: 1, done: false, feedback: false};
+}
+render();
+})();
+</script>
+</body>
+</html>
